@@ -69,7 +69,7 @@ curl \
   --key './client_key.pem' \
   --header 'content-type: application/json' \
   --request 'POST' \
-  --resolve "api.payone:{PORT}:{IP_ADDRESS}" \
+  --resolve 'api.payone:{PORT}:{IP_ADDRESS}' \
   --url 'https://api.payone:{PORT}/rpc' \
   --data '{"method": "client/registry/banks"}'
 ```
@@ -112,7 +112,7 @@ curl \
   --key './client_key.pem' \
   --header 'content-type: application/json' \
   --request 'POST' \
-  --resolve "api.payone:{PORT}:{IP_ADDRESS}" \
+  --resolve 'api.payone:{PORT}:{IP_ADDRESS}' \
   --url 'https://api.payone:{PORT}/rpc' \
   --data '{"method": "client/registry/currencies"}'
 ```
@@ -162,7 +162,7 @@ curl \
   --key './client_key.pem' \
   --header 'content-type: application/json' \
   --request 'POST' \
-  --resolve "api.payone:{PORT}:{IP_ADDRESS}" \
+  --resolve 'api.payone:{PORT}:{IP_ADDRESS}' \
   --url 'https://api.payone:{PORT}/rpc' \
   --data @- <<EOF
 {
@@ -231,7 +231,7 @@ curl \
   --key './client_key.pem' \
   --header 'content-type: application/json' \
   --request 'POST' \
-  --resolve "api.payone:{PORT}:{IP_ADDRESS}" \
+  --resolve 'api.payone:{PORT}:{IP_ADDRESS}' \
   --url 'https://api.payone:{PORT}/rpc' \
   --data @- <<EOF
 {
@@ -282,7 +282,7 @@ curl \
   --key './client_key.pem' \
   --header 'content-type: application/json' \
   --request 'POST' \
-  --resolve "api.payone:{PORT}:{IP_ADDRESS}" \
+  --resolve 'api.payone:{PORT}:{IP_ADDRESS}' \
   --url 'https://api.payone:{PORT}/rpc' \
   --data @- <<EOF
 {
@@ -351,7 +351,7 @@ curl \
   --key './client_key.pem' \
   --header 'content-type: application/json' \
   --request 'POST' \
-  --resolve "api.payone:{PORT}:{IP_ADDRESS}" \
+  --resolve 'api.payone:{PORT}:{IP_ADDRESS}' \
   --url 'https://api.payone:{PORT}/rpc' \
   --data @- <<EOF
 {
@@ -397,7 +397,7 @@ curl \
   --key './client_key.pem' \
   --header 'content-type: application/json' \
   --request 'POST' \
-  --resolve "api.payone:{PORT}:{IP_ADDRESS}" \
+  --resolve 'api.payone:{PORT}:{IP_ADDRESS}' \
   --url 'https://api.payone:{PORT}/rpc' \
   --data @- <<EOF
 {
@@ -460,7 +460,7 @@ curl \
   --key './client_key.pem' \
   --header 'content-type: application/json' \
   --request 'POST' \
-  --resolve "api.payone:{PORT}:{IP_ADDRESS}" \
+  --resolve 'api.payone:{PORT}:{IP_ADDRESS}' \
   --url 'https://api.payone:{PORT}/rpc' \
   --data '{"method": "client/report/today"}'
 ```
@@ -505,7 +505,7 @@ curl \
   --key './client_key.pem' \
   --header 'content-type: application/json' \
   --request 'POST' \
-  --resolve "api.payone:{PORT}:{IP_ADDRESS}" \
+  --resolve 'api.payone:{PORT}:{IP_ADDRESS}' \
   --url 'https://api.payone:{PORT}/rpc' \
   --data '{"method": "client/report/yesterday"}'
 ```
@@ -550,7 +550,7 @@ curl \
   --key './client_key.pem' \
   --header 'content-type: application/json' \
   --request 'POST' \
-  --resolve "api.payone:{PORT}:{IP_ADDRESS}" \
+  --resolve 'api.payone:{PORT}:{IP_ADDRESS}' \
   --url 'https://api.payone:{PORT}/rpc' \
   --data '{"method": "client/report/24hr"}'
 ```
@@ -603,7 +603,7 @@ $ curl \
   --key './client_key.pem' \
   --request 'GET' \
   --no-buffer \
-  --resolve "api.payone:{PORT}:{IP_ADDRESS}" \
+  --resolve 'api.payone:{PORT}:{IP_ADDRESS}' \
   --url 'https://api.payone:{PORT}/sse/client/events' \
 ```
 
