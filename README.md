@@ -43,10 +43,10 @@ endpoint: **/rpc**
 | `params` | method parameters | object     | `{"client_tx_id": "tx_01"}`     |
 
 #### JSON-RPC Response Object
-| key      | description     | value type | value example                                        |
-| -------- | --------------- | ---------- | ---------------------------------------------------- |
-| `result` | on success only | object     | `{"code":200,"text":"ok"}`                           |
-| `error`  | on failure only | object     | `{"validation":{"field":"uuid","reason":"required"}` |
+| key      | description     | value type | value example                                          |
+| -------- | --------------- | ---------- | ------------------------------------------------------ |
+| `result` | on success only | object     | `{"code":200,"text":"ok"}`                             |
+| `error`  | on failure only | object     | `{"validation":[{"field":"uuid","reason":"required"}]` |
 
 ### Examples
 
