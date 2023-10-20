@@ -45,7 +45,7 @@ endpoint: **/rpc**
 #### JSON-RPC Response Object
 | key      | description     | value type | value example                                        |
 | -------- | --------------- | ---------- | ---------------------------------------------------- |
-| `result` | on success only | object     | `{"result":{"code":200,"text":"ok"}}`                |
+| `result` | on success only | object     | `{"code":200,"text":"ok"}`                           |
 | `error`  | on failure only | object     | `{"validation":{"field":"uuid","reason":"required"}` |
 
 ### Examples
