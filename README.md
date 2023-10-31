@@ -604,7 +604,7 @@ $ curl \
   --request 'GET' \
   --no-buffer \
   --resolve 'api.payone:{PORT}:{IP_ADDRESS}' \
-  --url 'https://api.payone:{PORT}/sse/client/events' \
+  --url 'https://api.payone:{PORT}/sse/client/events'
 ```
 
 response stream:
