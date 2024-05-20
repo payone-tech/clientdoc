@@ -1,7 +1,7 @@
 # Client API Documentation
 
 API consists of two components:
-* [**json-rpc**](#json-rpc) to work with orders, watch available banks/currencies registries, and check reports;
+* [**json-rpc**](#json-rpc) to work with orders, watch available payment methods/currencies registries, and check reports;
 * [**sse (server-side-events)**](#sse) to subscribe on orders events in real time.
 
 ---
@@ -19,7 +19,7 @@ endpoint: **/rpc**
 #### Methods
 
 ##### Fetch Registries (read-only)
-* [client/registry/banks](#fetch-list-of-available-banks) - returns list of available banks for the client;
+* [client/registry/payment_methods](#fetch-list-of-available-payment_methods) - returns list of available payment methods for the client;
 * [client/registry/currencies](#fetch-list-of-available-currencies) - returns list of available currencies for the client.
 
 ##### Create/Cancel Orders
@@ -50,14 +50,14 @@ endpoint: **/rpc**
 
 ### Examples
 
-#### Fetch List of Available Banks
+#### Fetch List of Available Payment Methods
 ```
 endpoint: /rpc
 content-type: application/json
 method: POST
 ```
 
-method: **client/registry/banks**
+method: **client/registry/payment_methods**
 
 params: omit
 
@@ -71,7 +71,7 @@ curl \
   --request 'POST' \
   --resolve 'api.payone:{PORT}:{IP_ADDRESS}' \
   --url 'https://api.payone:{PORT}/rpc' \
-  --data '{"method": "client/registry/banks"}'
+  --data '{"method": "client/registry/payment_methods"}'
 ```
 
 response:
@@ -79,7 +79,7 @@ response:
 {
   "result": {
     "count": 2,
-    "banks": [
+    "payment_methods": [
       {
         "uuid": "a8234838-db88-4476-b32b-49640899e685",
         "title": "emirates bank"
@@ -144,15 +144,14 @@ method: **client/order/withdraw/create**
 
 params:
 
-| key              | description          | value type     | value example                            | mandatory |
-| ---------------- | -------------------- | -------------- | ---------------------------------------- | --------- |
-| `client_tx_id`   | client-side tx id    | string         | `"clientside_uniq_tx_id_01"`             | required  |
-| `client_user_id` | client-side user id  | string         | `"clientside_uniq_user_id_01"`           | optional  |
-| `currency_uuid`  | transaction currency | string         | `"4b96405b-654c-4f16-9527-eb42e650c8bb"` | required  |
-| `bank_uuid`      | transaction bank     | string         | `"52c50471-a179-4c6d-9d53-393f5d35cb82"` | optional  |
-| `sum`            | order sum            | decimal string | `"5000"`                                 | required  |
-| `pan`            | card pan             | string         | `"1111222233334444"`                     | required  |
-| `name`           | card holder name     | string         | `"John Doe"`                             | optional  |
+| key                   | description                | value type     | value example                            | mandatory |
+| --------------------- | -------------------------- | -------------- | ---------------------------------------- | --------- |
+| `client_tx_id`        | client-side tx id          | string         | `"clientside_uniq_tx_id_01"`             | required  |
+| `client_user_id`      | client-side user id        | string         | `"clientside_uniq_user_id_01"`           | optional  |
+| `currency_uuid`       | transaction currency       | string         | `"4b96405b-654c-4f16-9527-eb42e650c8bb"` | required  |
+| `payment_method_uuid` | transaction payment method | string         | `"52c50471-a179-4c6d-9d53-393f5d35cb82"` | optional  |
+| `sum`                 | order sum                  | decimal string | `"5000"`                                 | required  |
+| `account_number`      | account number             | string         | `"1111222233334444"`                     | required  |
 
 request:
 ```bash
@@ -171,10 +170,9 @@ curl \
     "client_tx_id": "tx7438041958",
     "client_user_id": "user110",
     "currency_uuid": "4b96405b-654c-4f16-9527-eb42e650c8bb",
-    "bank_uuid": "52c50471-a179-4c6d-9d53-393f5d35cb82",
+    "payment_method_uuid": "52c50471-a179-4c6d-9d53-393f5d35cb82",
     "sum": "1570.50",
-    "pan": "3030333305057070",
-    "name": "John Doe"
+    "account_number": "3030333305057070"
   }
 }
 EOF
@@ -192,9 +190,8 @@ response:
     "client_tx_id": "tx7438041958",
     "client_user_id": "user110",
     "sum": "1570.5",
-    "pan": "3030333305057070",
-    "name": "John Doe",
-    "bank": {
+    "account_number": "3030333305057070",
+    "payment_method": {
       "uuid": "52c50471-a179-4c6d-9d53-393f5d35cb82",
       "title": "capital bank"
     },
@@ -264,15 +261,14 @@ method: **client/order/deposit/create**
 
 params:
 
-| key              | description          | value type     | value example                            | mandatory |
-| ---------------- | -------------------- | -------------- | ---------------------------------------- | --------- |
-| `client_tx_id`   | client-side tx id    | string         | `"clientside_uniq_tx_id_01"`             | required  |
-| `client_user_id` | client-side user id  | string         | `"clientside_uniq_user_id_01"`           | optional  |
-| `currency_uuid`  | transaction currency | string         | `"4b96405b-654c-4f16-9527-eb42e650c8bb"` | required  |
-| `bank_uuid`      | transaction bank     | string         | `"52c50471-a179-4c6d-9d53-393f5d35cb82"` | optional  |
-| `sum`            | order sum            | decimal string | `"5000"`                                 | required  |
-| `pan`            | card pan             | string         | `"1111222233334444"`                     | optional  |
-| `name`           | card holder name     | string         | `"John Doe"`                             | optional  |
+| key                   | description                | value type     | value example                            | mandatory |
+| --------------------- | --------------------       | -------------- | ---------------------------------------- | --------- |
+| `client_tx_id`        | client-side tx id          | string         | `"clientside_uniq_tx_id_01"`             | required  |
+| `client_user_id`      | client-side user id        | string         | `"clientside_uniq_user_id_01"`           | optional  |
+| `currency_uuid`       | transaction currency       | string         | `"4b96405b-654c-4f16-9527-eb42e650c8bb"` | required  |
+| `payment_method_uuid` | transaction payment method | string         | `"52c50471-a179-4c6d-9d53-393f5d35cb82"` | optional  |
+| `sum`                 | order sum                  | decimal string | `"5000"`                                 | required  |
+| `account_number`      | account number             | string         | `"1111222233334444"`                     | optional  |
 
 request:
 ```bash
@@ -291,10 +287,9 @@ curl \
     "client_tx_id": "tx7438041959",
     "client_user_id": "user110",
     "currency_uuid": "4b96405b-654c-4f16-9527-eb42e650c8bb",
-    "bank_uuid": "52c50471-a179-4c6d-9d53-393f5d35cb82",
+    "payment_method_uuid": "52c50471-a179-4c6d-9d53-393f5d35cb82",
     "sum": "2570.50",
-    "pan": "4040333305057070",
-    "name": "John Doe"
+    "account_number": "4040333305057070",
   }
 }
 EOF
@@ -312,9 +307,8 @@ response:
     "client_tx_id": "tx7438041959",
     "client_user_id": "user110",
     "sum": "2570.5",
-    "pan": "4040333305057070",
-    "name": "John Doe",
-    "bank": {
+    "account_number": "4040333305057070",
+    "payment_method": {
       "uuid": "52c50471-a179-4c6d-9d53-393f5d35cb82",
       "title": "capital bank"
     },
@@ -422,13 +416,12 @@ response:
     "client_tx_id": "tx7438041959",
     "client_user_id": "user110",
     "sum": "2570.5",
-    "pan": "4040333305057070",
-    "name": "John Doe",
-    "bank": {
+    "account_number": "4040333305057070",
+    "payment_method": {
       "uuid": "a8234838-db88-4476-b32b-49640899e685",
       "title": "emirates bank"
     },
-    "card": {
+    "account": {
       "uuid": "aa788504-14e6-4f60-86fc-e33463e1e1d9",
       "number": "4242999933335555"
     },
