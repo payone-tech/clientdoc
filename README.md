@@ -27,6 +27,9 @@ endpoint: **/rpc**
 * [client/order/withdraw/cancel](#cancel-withdraw-order) - cancels withdraw order specified by identifier;
 * [client/order/deposit/create](#create-new-order-to-deposit-funds) - creates new order to deposit funds;
 * [client/order/deposit/cancel](#cancel-deposit-order) - cancels deposit order specified by identifier.
+* [client/order/deposit/pull/create](#create-new-pull-order-to-deposit-funds) - creates new order to deposit (pull) funds;
+* [client/order/deposit/pull/auth](#auth-pull-deposit-order) - authorizes specified by identifier pull deposit order with 3ds code.
+* [client/order/deposit/pull/cancel](#cancel-pull-deposit-order) - cancels pull deposit order specified by identifier.
 
 ##### Get Order Status (read-only)
 * [client/order/status](#get-order-status) - returns current state of the order specified by identifier.
@@ -352,6 +355,177 @@ curl \
   "method": "client/order/deposit/cancel",
   "params": {
     "uuid": "bc29825c-5207-46c0-a0c2-cc9253bbf4ca"
+  }
+}
+EOF
+```
+
+response:
+```json
+{
+  "result": {
+    "code": 200,
+    "text": "ok"
+  }
+}
+```
+
+#### Create New Pull Order to Deposit Funds
+```
+endpoint: /rpc
+content-type: application/json
+method: POST
+```
+
+method: **client/order/deposit/pull/create**
+
+params:
+
+| key                     | description                | value type     | value example                            | mandatory |
+| ----------------------- | -------------------------  | -------------- | ---------------------------------------- | --------- |
+| `client_tx_id`          | client-side tx id          | string         | `"clientside_uniq_tx_id_02"`             | required  |
+| `client_user_id`        | client-side user id        | string         | `"clientside_uniq_user_id_02"`           | optional  |
+| `currency_uuid`         | transaction currency       | string         | `"4b96405b-654c-4f16-9527-eb42e650c8bb"` | required  |
+| `payment_method_uuid`   | transaction payment method | string         | `"52c50471-a179-4c6d-9d53-393f5d35cb82"` | required  |
+| `sum`                   | order sum                  | decimal string | `"5000"`                                 | required  |
+| `account_number`        | account number             | string         | `"1111222233334444"`                     | required  |
+| `account_holder`        | account holder             | string         | `"John Doe"`                             | optional  |
+| `account_valid_through` | account number             | string         | `"12/24"`                                | required  |
+| `account_cvv`           | account cvv                | string         | `"999"`                                  | required  |
+
+request:
+```bash
+curl \
+  --cacert './server_cert.pem' \
+  --cert './client_cert.pem' \
+  --key './client_key.pem' \
+  --header 'content-type: application/json' \
+  --request 'POST' \
+  --resolve 'api.payone:{PORT}:{IP_ADDRESS}' \
+  --url 'https://api.payone:{PORT}/rpc' \
+  --data @- <<EOF
+{
+  "method": "client/order/deposit/pull/create",
+  "params": {
+    "client_tx_id": "tx7438052284,
+    "client_user_id": "user110",
+    "currency_uuid": "e90bd6e8-4160-4ecb-a2a1-6db5b04fd81b",
+    "payment_method_uuid": "ae4c8d21-e78a-452d-8b8c-a474dafcca03",
+    "sum": "2570.50",
+    "account_number": "4040333305057070",
+    "account_holder": "John Doe",
+    "account_valid_through": "12/24",
+    "account_cvv": "999"
+  }
+}
+EOF
+```
+
+response:
+```json
+{
+  "result": {
+    "uuid": "bbd981e8-869c-4afe-a8ee-d4f827874d3a",
+    "status": "created",
+    "created_ts": 1717728524,
+    "expire_ts": 1717729124,
+    "updated_ts": 1717728524,
+    "client_tx_id": "tx7438052284",
+    "client_user_id": "user110",
+    "sum": "2570.5",
+    "account_number": "4040333305057070",
+    "payment_method": {
+      "uuid": "ae4c8d21-e78a-452d-8b8c-a474dafcca03",
+      "title": "m10-pull"
+    },
+    "currency": {
+      "uuid": "e90bd6e8-4160-4ecb-a2a1-6db5b04fd81b",
+      "title": "azerbaijani manat",
+      "code": "azn"
+    }
+  }
+}
+```
+
+#### Auth Pull Deposit Order
+```
+endpoint: /rpc
+content-type: application/json
+method: POST
+```
+
+method: **client/order/deposit/pull/auth**
+
+params:
+
+| key            | description          | value type | value example                            | mandatory |
+| -------------- | -------------------- | ---------- | ---------------------------------------- | --------- |
+| `uuid`         | order uuid           | string     | `"bbd981e8-869c-4afe-a8ee-d4f827874d3a"` | optional  |
+| `client_tx_id` | client-side tx id    | string     | `"clientside_uniq_tx_id_02"`             | optional  |
+| `code`         | 3ds code             | string     | `"123123"`                               | required  |
+
+request:
+```bash
+curl \
+  --cacert './server_cert.pem' \
+  --cert './client_cert.pem' \
+  --key './client_key.pem' \
+  --header 'content-type: application/json' \
+  --request 'POST' \
+  --resolve 'api.payone:{PORT}:{IP_ADDRESS}' \
+  --url 'https://api.payone:{PORT}/rpc' \
+  --data @- <<EOF
+{
+  "method": "client/order/deposit/pull/auth",
+  "params": {
+    "uuid": "bbd981e8-869c-4afe-a8ee-d4f827874d3a",
+    "code": "123123"
+  }
+}
+EOF
+```
+
+response:
+```json
+{
+  "result": {
+    "code": 200,
+    "text": "ok"
+  }
+}
+```
+
+#### Cancel Pull Deposit Order
+```
+endpoint: /rpc
+content-type: application/json
+method: POST
+```
+
+method: **client/order/deposit/pull/cancel**
+
+params:
+
+| key            | description          | value type | value example                            | mandatory |
+| -------------- | -------------------- | ---------- | ---------------------------------------- | --------- |
+| `uuid`         | order uuid           | string     | `"bbd981e8-869c-4afe-a8ee-d4f827874d3a"` | optional  |
+| `client_tx_id` | client-side tx id    | string     | `"clientside_uniq_tx_id_02"`             | optional  |
+
+request:
+```bash
+curl \
+  --cacert './server_cert.pem' \
+  --cert './client_cert.pem' \
+  --key './client_key.pem' \
+  --header 'content-type: application/json' \
+  --request 'POST' \
+  --resolve 'api.payone:{PORT}:{IP_ADDRESS}' \
+  --url 'https://api.payone:{PORT}/rpc' \
+  --data @- <<EOF
+{
+  "method": "client/order/deposit/pull/cancel",
+  "params": {
+    "uuid": "bbd981e8-869c-4afe-a8ee-d4f827874d3a"
   }
 }
 EOF
